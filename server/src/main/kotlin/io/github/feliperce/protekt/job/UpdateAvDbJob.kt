@@ -6,31 +6,33 @@ import extensions.loadBloomFilter
 import extensions.saveBloomFilter
 import korlibs.crypto.MD5
 import korlibs.crypto.md5
-import korlibs.encoding.hex
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.files.sink
 import kotlinx.io.readByteArray
 import org.quartz.Job
 import org.quartz.JobExecutionContext
 import java.io.File
-import kotlin.io.path.*
 
 class UpdateAvDbJob : Job {
     override fun execute(context: JobExecutionContext) {
         val clamAvDbFolder = File("/home/felipe/clamav-db")
         clamAvDbFolder.mkdir()
 
+        val dbTmp = File("/tmp/clamav-db")
+        dbTmp.mkdir()
+
+        execAndWait("sigtool -u /var/lib/clamav/main.cvd", dbTmp)
+
         val dbPath = File("/home/felipe/Documentos/virus teste/main.hdb")
 
         val virusPath = Path("/home/felipe/Documentos/virus teste/eicar.com.txt")
 
         println("JOB START")
-        /*execAndWait(
+        execAndWait(
             command = "sigtool -u ~/clamav-db/main.cvd",
             dir = clamAvDbFolder
-        )*/
+        )
 
         val malwareInfoList = readMalwareInfoFromFile(dbPath)
 
