@@ -31,11 +31,9 @@ fun Path.saveBloomFilter(bloomFilter: BloomFilter) {
     try {
         val tobyte = bloomFilter.toByteArray()
 
-        /*val deode = ProtoBuf.decodeFromByteArray<BloomFilter>(tobyte)
-        println("DECODED: ${deode.numBits} - ${deode.numHashFunctions}")*/
-        /*SystemFileSystem.sink(this).buffered().use { sink ->
+        SystemFileSystem.sink(this).buffered().use { sink ->
             sink.write(bloomFilter.toByteArray()) // Assuming your BloomFilter has a toByteArray() method
-        }*/
+        }
     } catch (e: IOException) {
         // Handle potential IOExceptions (e.g., file not found, permissions, etc.)
         e.printStackTrace()

@@ -6,6 +6,7 @@ import extensions.loadBloomFilter
 import extensions.saveBloomFilter
 import korlibs.crypto.MD5
 import korlibs.crypto.md5
+import korlibs.encoding.hex
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -39,7 +40,7 @@ class UpdateAvDbJob : Job {
             hashAlgorithm = MD5.name
         )
 
-        val virusMd5 = SystemFileSystem.source(virusPath).buffered().readByteArray().md5()
+        val virusMd5 = SystemFileSystem.source(virusPath).buffered().readByteArray().md5().hex
 
         malwareInfoList.forEach {
             println(it)
@@ -54,17 +55,19 @@ class UpdateAvDbJob : Job {
 
 
         println("virus md5: $virusMd5")
-        println("Bloom mightcontain: "+bloomFilter.mightContain(SystemFileSystem.source(virusPath).buffered().readByteArray().md5().bytes))
+        println("Bloom mightcontain: "+bloomFilter.mightContain(virusMd5.toByteArray()))
 
         //SystemFileSystem.source(virusPath).buffered()
 
         val binPath = Path("/home/felipe/Documentos/virus teste/aaa.bin")
 
-        //binPath.saveBloomFilter(bloomFilter)
+        binPath.saveBloomFilter(bloomFilter)
 
         val newBloom = Path("/home/felipe/Documentos/virus teste/aaa.bin").loadBloomFilter()
 
-        println("NEW FILE Bloom mightcontain: "+newBloom?.mightContain(SystemFileSystem.source(virusPath).buffered().readByteArray()))
+        println("NEW BLOOM INFO: ${newBloom?.numBits} - ${newBloom?.numHashFunctions}")
+
+        println("NEW FILE Bloom mightcontain: "+newBloom?.mightContain(virusMd5.toByteArray()))
     }
 
     fun readMalwareInfoFromFile(file: File): List<MalwareInfo> {
