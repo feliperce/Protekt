@@ -20,4 +20,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
 
     implementation(libs.quartz)
+
+    implementation("com.soywiz.korge:korlibs-crypto:5.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.1")
 }
