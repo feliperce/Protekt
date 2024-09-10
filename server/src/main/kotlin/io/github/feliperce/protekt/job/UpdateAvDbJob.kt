@@ -2,71 +2,87 @@ package io.github.feliperce.protekt.job
 
 import data.BloomFilter
 import data.MalwareInfo
-import extensions.loadBloomFilter
 import extensions.saveBloomFilter
 import korlibs.crypto.MD5
-import korlibs.crypto.md5
-import kotlinx.io.buffered
+import korlibs.crypto.SHA1
+import korlibs.crypto.SHA256
 import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.readByteArray
 import org.quartz.Job
 import org.quartz.JobExecutionContext
 import java.io.File
 
 class UpdateAvDbJob : Job {
+
+    private val AV_DB_PATH = "/home/felipe/clamav-db/"
+    private val CLAMAV_PATH = "/var/lib/clamav/"
+    private val TMP_PATH = "/tmp/"
+
     override fun execute(context: JobExecutionContext) {
-        val clamAvDbFolder = File("/home/felipe/clamav-db")
+        val clamAvDbFolder = File(AV_DB_PATH)
         clamAvDbFolder.mkdir()
 
-        val dbTmp = File("/tmp/clamav-db")
+        val dbTmp = File("${TMP_PATH}clamav-db")
         dbTmp.mkdir()
 
-        execAndWait("sigtool -u /var/lib/clamav/main.cvd", dbTmp)
+        println("AV UPDATE START")
+
+        execAndWait("sigtool -u ${CLAMAV_PATH}main.cvd", dbTmp)
         execAndWait("cp -rf main.hdb ${clamAvDbFolder.absolutePath}", dbTmp)
         execAndWait("cp -rf main.hsb ${clamAvDbFolder.absolutePath}", dbTmp)
 
-        val dbPath = File("/home/felipe/Documentos/virus teste/main.hdb")
-        val virusPath = Path("/home/felipe/Documentos/virus teste/eicar.com.txt")
+        val mainHdbPath = File("${AV_DB_PATH}main.hdb")
+        val mainHsbPath = File("${AV_DB_PATH}main.hsb")
 
-        println("JOB START")
+        val mainHdbMalwareInfoList = readMalwareInfoFromFile(mainHdbPath)
+        val mainHsbMalwareInfoList = readMalwareInfoFromFile(mainHsbPath)
 
-        val malwareInfoList = readMalwareInfoFromFile(dbPath)
+        val fullHashList = (mainHdbMalwareInfoList + mainHsbMalwareInfoList)
 
-        val bloomFilter = BloomFilter(
-            expectedInsertions = malwareInfoList.size,
+        val hashMd5MalwareInfoList = fullHashList.filter {
+            it.hashType == MD5.name
+        }
+        val hashSha1MalwareInfoList = fullHashList.filter {
+            it.hashType == SHA1.name
+        }
+        val hashSha256MalwareInfoList = fullHashList.filter {
+            it.hashType == SHA256.name
+        }
+
+        println(hashSha1MalwareInfoList)
+
+        val md5BloomFilter = BloomFilter(
+            expectedInsertions = hashMd5MalwareInfoList.size,
             falsePositiveProbability = 0.01,
             hashAlgorithm = MD5.name
         )
+        val sha256BloomFilter = BloomFilter(
+            expectedInsertions = hashSha256MalwareInfoList.size,
+            falsePositiveProbability = 0.01,
+            hashAlgorithm = SHA256.name
+        )
+        val sha1BloomFilter = BloomFilter(
+            expectedInsertions = hashSha1MalwareInfoList.size,
+            falsePositiveProbability = 0.01,
+            hashAlgorithm = SHA1.name
+        )
 
-        val virusMd5 = SystemFileSystem.source(virusPath).buffered().readByteArray().md5().hex
-
-        malwareInfoList.forEach {
-            println(it)
-            bloomFilter.add(it.hash.toByteArray())
+        hashMd5MalwareInfoList.forEach {
+            md5BloomFilter.add(it.hash.toByteArray())
+        }
+        hashSha256MalwareInfoList.forEach {
+            sha256BloomFilter.add(it.hash.toByteArray())
+        }
+        hashSha1MalwareInfoList.forEach {
+            sha1BloomFilter.add(it.hash.toByteArray())
         }
 
-        malwareInfoList.forEach {
-            if (it.hash == virusMd5.toString()) {
-                println("**************************************************************************************************************************************************************")
-            }
-        }
+        val md5binPath = Path("${AV_DB_PATH}md5bf.bin")
+        val sha256binPath = Path("${AV_DB_PATH}sha256bf.bin")
+        val sha1binPath = Path("${AV_DB_PATH}sha1bf.bin")
 
-
-        println("virus md5: $virusMd5")
-        println("Bloom mightcontain: "+bloomFilter.mightContain(virusMd5.toByteArray()))
-
-        //SystemFileSystem.source(virusPath).buffered()
-
-        val binPath = Path("/home/felipe/clamav-db/md5bf.bin")
-
-        binPath.saveBloomFilter(bloomFilter)
-
-        /*val newBloom = Path("/home/felipe/Documentos/virus teste/aaa.bin").loadBloomFilter()
-
-        println("NEW BLOOM INFO: ${newBloom?.numBits} - ${newBloom?.numHashFunctions}")
-
-        println("NEW FILE Bloom mightcontain: "+newBloom?.mightContain(virusMd5.toByteArray()))*/
+        md5binPath.saveBloomFilter(md5BloomFilter)
+        sha256binPath.saveBloomFilter(sha256BloomFilter)
+        sha1binPath.saveBloomFilter(sha1BloomFilter)
     }
 
     fun readMalwareInfoFromFile(file: File): List<MalwareInfo> {
@@ -74,12 +90,22 @@ class UpdateAvDbJob : Job {
 
         file.forEachLine { line ->
             val parts = line.split(":")
-            if (parts.size == 3) {
-                val malwareInfo = MalwareInfo(parts[0], parts[1], parts[2])
+
+                val hash = parts[0]
+                val hashType = when (hash.length) {
+                    32 -> MD5.name
+                    40 -> SHA1.name
+                    64 -> SHA256.name
+                    else -> "undefined"
+                }
+                val malwareInfo = MalwareInfo(
+                    hash = hash,
+                    hashType = hashType,
+                    id = parts[1],
+                    name = parts[2]
+                )
                 malwareInfoList.add(malwareInfo)
-            } else {
-                println("Linha inválida no arquivo: $line")
-            }
+
         }
 
         return malwareInfoList
@@ -94,5 +120,3 @@ fun execAndWait(command: String, dir: File? = null): Int {
         .start()
         .waitFor()
 }
-
-// sigtool -u ~/clamav-db/main.cvd
