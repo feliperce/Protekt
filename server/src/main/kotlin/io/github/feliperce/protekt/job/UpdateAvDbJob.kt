@@ -23,16 +23,13 @@ class UpdateAvDbJob : Job {
         dbTmp.mkdir()
 
         execAndWait("sigtool -u /var/lib/clamav/main.cvd", dbTmp)
+        execAndWait("cp -rf main.hdb ${clamAvDbFolder.absolutePath}", dbTmp)
+        execAndWait("cp -rf main.hsb ${clamAvDbFolder.absolutePath}", dbTmp)
 
         val dbPath = File("/home/felipe/Documentos/virus teste/main.hdb")
-
         val virusPath = Path("/home/felipe/Documentos/virus teste/eicar.com.txt")
 
         println("JOB START")
-        execAndWait(
-            command = "sigtool -u ~/clamav-db/main.cvd",
-            dir = clamAvDbFolder
-        )
 
         val malwareInfoList = readMalwareInfoFromFile(dbPath)
 
@@ -61,15 +58,15 @@ class UpdateAvDbJob : Job {
 
         //SystemFileSystem.source(virusPath).buffered()
 
-        val binPath = Path("/home/felipe/Documentos/virus teste/aaa.bin")
+        val binPath = Path("/home/felipe/clamav-db/md5bf.bin")
 
         binPath.saveBloomFilter(bloomFilter)
 
-        val newBloom = Path("/home/felipe/Documentos/virus teste/aaa.bin").loadBloomFilter()
+        /*val newBloom = Path("/home/felipe/Documentos/virus teste/aaa.bin").loadBloomFilter()
 
         println("NEW BLOOM INFO: ${newBloom?.numBits} - ${newBloom?.numHashFunctions}")
 
-        println("NEW FILE Bloom mightcontain: "+newBloom?.mightContain(virusMd5.toByteArray()))
+        println("NEW FILE Bloom mightcontain: "+newBloom?.mightContain(virusMd5.toByteArray()))*/
     }
 
     fun readMalwareInfoFromFile(file: File): List<MalwareInfo> {
