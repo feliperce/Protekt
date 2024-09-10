@@ -12,6 +12,7 @@ import org.quartz.JobBuilder
 import org.quartz.SimpleScheduleBuilder
 import org.quartz.TriggerBuilder
 import org.quartz.impl.StdSchedulerFactory
+import java.io.File
 
 fun main() {
 
@@ -26,14 +27,14 @@ fun main() {
         .withIdentity("comandoTrigger", "grupo")
         .withSchedule(
             SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInSeconds(10)
-                //.withIntervalInHours(12) // Executar a cada 12 horas
+                .withIntervalInSeconds(50000)
+                //.withIntervalInHours(12)
                 .repeatForever())
         .build()
 
     scheduler.scheduleJob(job, trigger)
 
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = SERVER_PORT, host = "localhost", module = Application::module)
         .start(wait = true)
 
 
@@ -43,6 +44,10 @@ fun Application.module() {
     routing {
         get("/") {
             call.respondText("Ktor: ${Greeting().greet()}")
+        }
+
+        get("/getmd5db") {
+            call.respondFile(File("/home/felipe/clamav-db/md5bf.bin"))
         }
     }
 }
