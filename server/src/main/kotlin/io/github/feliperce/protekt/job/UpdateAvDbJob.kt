@@ -1,5 +1,8 @@
 package io.github.feliperce.protekt.job
 
+import MD5_BF_FILE_NAME
+import SHA1_BF_FILE_NAME
+import SHA256_BF_FILE_NAME
 import data.BloomFilter
 import data.MalwareInfo
 import extensions.saveBloomFilter
@@ -48,8 +51,6 @@ class UpdateAvDbJob : Job {
             it.hashType == SHA256.name
         }
 
-        println(hashSha1MalwareInfoList)
-
         val md5BloomFilter = BloomFilter(
             expectedInsertions = hashMd5MalwareInfoList.size,
             falsePositiveProbability = 0.01,
@@ -76,9 +77,9 @@ class UpdateAvDbJob : Job {
             sha1BloomFilter.add(it.hash.toByteArray())
         }
 
-        val md5binPath = Path("${AV_DB_PATH}md5bf.bin")
-        val sha256binPath = Path("${AV_DB_PATH}sha256bf.bin")
-        val sha1binPath = Path("${AV_DB_PATH}sha1bf.bin")
+        val md5binPath = Path("${AV_DB_PATH}${MD5_BF_FILE_NAME}")
+        val sha256binPath = Path("${AV_DB_PATH}${SHA256_BF_FILE_NAME}")
+        val sha1binPath = Path("${AV_DB_PATH}${SHA1_BF_FILE_NAME}")
 
         md5binPath.saveBloomFilter(md5BloomFilter)
         sha256binPath.saveBloomFilter(sha256BloomFilter)
