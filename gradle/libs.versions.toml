@@ -14,8 +14,10 @@ compose-plugin = "1.6.11"
 junit = "4.13.2"
 kotlin = "2.0.0"
 ktor = "2.3.12"
+ktor-eap = "3.0.0-beta-2-eap-913"
 logback = "1.5.6"
 quartz = "2.3.2"
+appsdir = "1.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -29,10 +31,15 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-eap" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-eap" }
+ktor-client-json = { group = "io.ktor", name = "ktor-client-json", version.ref = "ktor-eap" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-eap" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
 quartz = { module = "org.quartz-scheduler:quartz", version.ref = "quartz" }
+appsdir = { module = "ca.gosyer:kotlin-multiplatform-appdirs", version.ref = "appsdir" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

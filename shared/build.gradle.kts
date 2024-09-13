@@ -42,7 +42,13 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.1")
             implementation("com.soywiz.korge:korlibs-crypto:5.4.0")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.7.1")
-            // put your Multiplatform dependencies here
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.logging)
+
+            implementation(libs.appsdir)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }

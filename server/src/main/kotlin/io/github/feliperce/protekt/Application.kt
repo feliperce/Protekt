@@ -34,16 +34,27 @@ fun main() {
 
     scheduler.scheduleJob(job, trigger)
 
-    embeddedServer(Netty, port = SERVER_PORT, host = "localhost", module = Application::module)
+    embeddedServer(Netty, port = SERVER_PORT, host = "192.168.1.9", module = Application::module)
         .start(wait = true)
 
 
 }
 
 fun Application.module() {
+
+    data class Aii(
+        val abc: String = "dfsafsfsdfsfsdfsd"
+    )
+
     routing {
         get("/") {
             call.respondText("Ktor: ${Greeting().greet()}")
+        }
+
+        get("/aa") {
+            val id = call.parameters["id"]
+            val customer: Aii = Aii()
+            call.respond(customer)
         }
 
         get("/getmd5db") {

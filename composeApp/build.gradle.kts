@@ -64,6 +64,10 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.1")
+
+            implementation(libs.appsdir)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
