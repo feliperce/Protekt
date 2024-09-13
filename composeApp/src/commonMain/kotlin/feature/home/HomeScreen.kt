@@ -37,7 +37,7 @@ fun HomeScreen() {
         println("UUUUUUUUUUUUUUUUUUUUUU: ${path}")
         avService.getMd5Db(
             onRead = {
-                SystemFileSystem.sink(Path(appDirs.getUserCacheDir()+"/dasdas.bin"), false).buffered().use { sink ->
+                SystemFileSystem.sink(path, false).buffered().use { sink ->
                     println("ADFFASFASDJMOIKFSJDOIFJOISD JOIFJSIODFJIOS DJOIF JSDIOFJIOSDJIOFSDJIOFJIOSD")
                     sink.write(it)
                 }

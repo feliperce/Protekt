@@ -23,32 +23,31 @@ class AvService (
 ) {
 
     suspend fun getMd5Db(onRead: (bytes: ByteArray) -> Unit) {
-        /*client.prepareGet("http://192.168.1.9:8080/getmd5db").execute { httpResponse ->
+        client.prepareGet("http://192.168.1.9:8080/getmd5db").execute { httpResponse ->
             val channel: ByteReadChannel = httpResponse.body()
             while (!channel.isClosedForRead) {
-                val packet = channel.readRemaining(1024*1024.toLong())
+                val packet = channel.readRemaining()
                 while (!packet.isEmpty) {
                     val bytes = packet.readBytes()
                     //file.appendBytes(bytes)
-                    *//*SystemFileSystem.sink(Path(tempFile+"/dasdas.bin"), true).buffered().use { sink ->
+                    /*SystemFileSystem.sink(Path(tempFile+"/dasdas.bin"), true).buffered().use { sink ->
                         sink.write(bytes)
-                    }*//*
+                    }*/
                     onRead(bytes)
                     println("Received  bytes from ${httpResponse.contentLength()}")
-                    break
                 }
             }
             //println("A file saved to ${file.path}")
-        }*/
+        }
 
-        val httpResponse: HttpResponse = client.get("http://192.168.1.9:8080/getmd5db") {
+        /*val httpResponse: HttpResponse = client.get("http://192.168.1.9:8080/getmd5db") {
             onDownload { bytesSentTotal, contentLength ->
                 println("Received $bytesSentTotal bytes from $contentLength")
             }
         }
         val responseBody: ByteArray = httpResponse.body()
 
-        onRead(responseBody)
+        onRead(responseBody)*/
 
     }
 
