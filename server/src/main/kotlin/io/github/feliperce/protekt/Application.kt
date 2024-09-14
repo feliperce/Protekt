@@ -1,7 +1,8 @@
 package io.github.feliperce.protekt
 
 import Greeting
-import SERVER_PORT
+import SvProperty
+import SvProperty.SERVER_PORT
 import io.github.feliperce.protekt.job.UpdateAvDbJob
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -58,7 +59,9 @@ fun Application.module() {
         }
 
         get("/getmd5db") {
-            call.respondFile(File("/home/felipe/clamav-db/md5bf.bin"))
+            call.respondFile(
+                File("/home/felipe/clamav-db/${SvProperty.MD5_BF_FILE_NAME}")
+            )
         }
     }
 }

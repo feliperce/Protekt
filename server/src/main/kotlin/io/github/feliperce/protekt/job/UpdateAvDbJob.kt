@@ -1,8 +1,8 @@
 package io.github.feliperce.protekt.job
 
-import MD5_BF_FILE_NAME
-import SHA1_BF_FILE_NAME
-import SHA256_BF_FILE_NAME
+import SvProperty.MD5_BF_FILE_NAME
+import SvProperty.SHA1_BF_FILE_NAME
+import SvProperty.SHA256_BF_FILE_NAME
 import data.BloomFilter
 import data.MalwareInfo
 import extensions.saveBloomFilter

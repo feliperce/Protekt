@@ -1,5 +1,6 @@
 package data.remote
 
+import SvProperty
 import data.client
 import extensions.saveBloomFilter
 import io.ktor.client.*
@@ -23,7 +24,7 @@ class AvService (
 ) {
 
     suspend fun getMd5Db(onRead: (bytes: ByteArray) -> Unit) {
-        client.prepareGet("http://192.168.1.9:8080/getmd5db").execute { httpResponse ->
+        client.prepareGet("$BASE_URL/getmd5db").execute { httpResponse ->
             val channel: ByteReadChannel = httpResponse.body()
             while (!channel.isClosedForRead) {
                 val packet = channel.readRemaining()
@@ -52,7 +53,6 @@ class AvService (
     }
 
     companion object {
-        const val BASE_URL = "http://localhost:8080"
+        const val BASE_URL = "http://${SvProperty.HOST}:${SvProperty.SERVER_PORT}"
     }
-
 }
