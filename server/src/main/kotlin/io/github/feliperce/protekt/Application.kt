@@ -63,5 +63,17 @@ fun Application.module() {
                 File("/home/felipe/clamav-db/${SvProperty.MD5_BF_FILE_NAME}")
             )
         }
+
+        get("/getsha1db") {
+            call.respondFile(
+                File("/home/felipe/clamav-db/${SvProperty.SHA1_BF_FILE_NAME}")
+            )
+        }
+
+        get("/getsha256db") {
+            call.respondFile(
+                File("/home/felipe/clamav-db/${SvProperty.SHA256_BF_FILE_NAME}")
+            )
+        }
     }
 }

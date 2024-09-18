@@ -40,10 +40,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.1")
-            implementation("com.soywiz.korge:korlibs-crypto:5.4.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.7.1")
+            implementation(libs.korlibs.crypto)
+            implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.test)
 
             implementation(libs.appsdir)
         }

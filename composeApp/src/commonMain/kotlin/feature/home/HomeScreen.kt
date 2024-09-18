@@ -16,34 +16,6 @@ import kotlinx.io.files.SystemFileSystem
 @Composable
 fun HomeScreen() {
 
-    Text("dasdasdasdasdas")
-    val avService = AvService()
-
-    val scope = rememberCoroutineScope()
-
-    val path = Path("/data/data/io.github.feliperce.protekt/cache/dasdasdsa.bin")
-
-    val appDirs = AppDirs("io.github.feliperce.protekt", "feliperce")
-
-    //SystemFileSystem.sink(Path(appDirs.getUserCacheDir()))
-
-    /*SystemFileSystem.sink(path, false).buffered().use { sink ->
-        println("ADF")
-        sink.writeInt(34124)
-    }*/
-
-    scope.launch {
-
-        println("UUUUUUUUUUUUUUUUUUUUUU: ${path}")
-        avService.getMd5Db(
-            onRead = {
-                SystemFileSystem.sink(path, false).buffered().use { sink ->
-                    println("ADFFASFASDJMOIKFSJDOIFJOISD JOIFJSIODFJIOS DJOIF JSDIOFJIOSDJIOFSDJIOFJIOSD")
-                    sink.write(it)
-                }
-            }
-        )
-    }
 }
 
 @Composable

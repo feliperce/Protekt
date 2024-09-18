@@ -21,6 +21,6 @@ dependencies {
 
     implementation(libs.quartz)
 
-    implementation("com.soywiz.korge:korlibs-crypto:5.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.1")
+    implementation(libs.korlibs.crypto)
+    implementation(libs.kotlinx.io.core)
 }

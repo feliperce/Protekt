@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.plugins.logging.*
 
 actual val client: HttpClient
-    get() =HttpClient() {
+    get() = HttpClient() {
     install(Logging) {
         level = LogLevel.ALL
     }

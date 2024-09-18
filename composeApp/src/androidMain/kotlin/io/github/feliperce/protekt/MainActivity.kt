@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import feature.dbupdate.DbUpdateScreen
 import feature.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +19,7 @@ class MainActivity : ComponentActivity() {
             context.requestStoragePermissions {
 
             }
-            HomeScreen()
+            DbUpdateScreen()
         }
     }
 }

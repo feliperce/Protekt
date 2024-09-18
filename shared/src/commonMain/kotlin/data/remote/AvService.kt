@@ -20,25 +20,23 @@ import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.write
 
 class AvService (
-
+    private val client: HttpClient
 ) {
 
-    suspend fun getMd5Db(onRead: (bytes: ByteArray) -> Unit) {
-        client.prepareGet("$BASE_URL/getmd5db").execute { httpResponse ->
+    suspend fun getDb(
+        dbUrl: String,
+        onRead: (bytes: ByteArray) -> Unit
+    ) {
+        client.prepareGet(dbUrl).execute { httpResponse ->
             val channel: ByteReadChannel = httpResponse.body()
             while (!channel.isClosedForRead) {
                 val packet = channel.readRemaining()
                 while (!packet.isEmpty) {
                     val bytes = packet.readBytes()
-                    //file.appendBytes(bytes)
-                    /*SystemFileSystem.sink(Path(tempFile+"/dasdas.bin"), true).buffered().use { sink ->
-                        sink.write(bytes)
-                    }*/
                     onRead(bytes)
-                    println("Received  bytes from ${httpResponse.contentLength()}")
+                    println("Received bytes from ${httpResponse.contentLength()}")
                 }
             }
-            //println("A file saved to ${file.path}")
         }
 
         /*val httpResponse: HttpResponse = client.get("http://192.168.1.9:8080/getmd5db") {
@@ -49,10 +47,13 @@ class AvService (
         val responseBody: ByteArray = httpResponse.body()
 
         onRead(responseBody)*/
-
     }
 
     companion object {
         const val BASE_URL = "http://${SvProperty.HOST}:${SvProperty.SERVER_PORT}"
+
+        const val MD5_DB_URL = "$BASE_URL/getmd5db"
+        const val SHA1_DB_URL = "$BASE_URL/getsha1db"
+        const val SHA256_DB_URL = "$BASE_URL/getsha256db"
     }
 }
