@@ -42,15 +42,19 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinxIoCore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationProtobuf" }
 kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinxSerializationProtobuf" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-eap" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-eap" }
 ktor-client-json = { group = "io.ktor", name = "ktor-client-json", version.ref = "ktor-eap" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-eap" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-eap" }
+ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-eap" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 quartz = { module = "org.quartz-scheduler:quartz", version.ref = "quartz" }
 appsdir = { module = "ca.gosyer:kotlin-multiplatform-appdirs", version.ref = "appsdir" }
 

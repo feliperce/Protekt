@@ -1,12 +1,13 @@
 package io.github.feliperce.protekt
 
-import Greeting
 import SvProperty
 import SvProperty.SERVER_PORT
 import io.github.feliperce.protekt.job.UpdateAvDbJob
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.quartz.JobBuilder
@@ -35,29 +36,20 @@ fun main() {
 
     scheduler.scheduleJob(job, trigger)
 
-    embeddedServer(Netty, port = SERVER_PORT, host = "192.168.1.9", module = Application::module)
-        .start(wait = true)
-
-
+    embeddedServer(
+        Netty,
+        port = SERVER_PORT,
+        host = "192.168.1.9",
+        module = Application::module,
+    ).start(wait = true)
 }
 
 fun Application.module() {
-
-    data class Aii(
-        val abc: String = "dfsafsfsdfsfsdfsd"
-    )
+    install(ContentNegotiation) {
+        json()
+    }
 
     routing {
-        get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
-        }
-
-        get("/aa") {
-            val id = call.parameters["id"]
-            val customer: Aii = Aii()
-            call.respond(customer)
-        }
-
         get("/getmd5db") {
             call.respondFile(
                 File("/home/felipe/clamav-db/${SvProperty.MD5_BF_FILE_NAME}")

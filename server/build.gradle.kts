@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     application
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 group = "io.github.feliperce.protekt"
@@ -18,6 +19,9 @@ dependencies {
     implementation(libs.ktor.server.netty)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.ktor.server.content.negotiation)
 
     implementation(libs.quartz)
 
