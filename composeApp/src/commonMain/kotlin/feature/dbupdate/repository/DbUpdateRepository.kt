@@ -19,7 +19,7 @@ class DbUpdateRepository(
         dbPath: String
     ) = flow<Resource<Boolean>> {
         avService.getDb(dbUrl) { bytes ->
-            SystemFileSystem.sink(Path(dbPath), true).buffered().use { sink ->
+            SystemFileSystem.sink(Path(dbPath), false).buffered().use { sink ->
                 println("ADFFASFASDJMOIKFSJDOIFJOISD JOIFJSIODFJIOS DJOIF JSDIOFJIOSDJIOFSDJIOFJIOSD")
                 sink.write(bytes)
             }
